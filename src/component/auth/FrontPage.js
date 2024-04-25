@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCube } from '@fortawesome/free-solid-svg-icons';
 
+
 const FrontPage = () => {
     const [showLoginCard, setShowLoginCard] = useState(false);
 
@@ -13,6 +14,7 @@ const FrontPage = () => {
                     <div className='text-3xl font-bold text-[#00df9a]'>SKILL ODESSEY</div>
                 </div>
                 <ul className="flex items-center">
+                
                     <li>
                         <a href="login">
                         <button
