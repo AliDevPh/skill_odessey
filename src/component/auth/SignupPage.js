@@ -33,8 +33,8 @@ const SignupPage = () => {
       const response = await axios.post('http://localhost:3000/signup', formData);
 
       if (response.status === 201) {
-        console.log('Signup successful!');
-        window.location.href = 'http://localhost:3001/LandingPage'
+        window.alert('Signup successful!');
+        window.location.href = 'http://localhost:3001/Landing-Page';
       } else {
         console.error('Unexpected response:', response);
       }
