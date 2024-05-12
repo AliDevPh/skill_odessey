@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logoImage from './AAAAA (6).png';
 import icon from './User_fill@2x.png';
 import mortar from './Mortarboard_light@2x.png';
@@ -9,6 +9,8 @@ import home from './Home_fill@2x.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCube } from '@fortawesome/free-solid-svg-icons';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
 
 const FrontendPage = () => {
   const [showSidebarFundamentals, setShowSidebarFundamentals] = useState(false);
@@ -64,6 +66,7 @@ const FrontendPage = () => {
   
  
 
+  const navigate = useNavigate();
   const handleStatusChange = (status) => {
     setSelectedStatus(status);
   };
@@ -74,6 +77,23 @@ const FrontendPage = () => {
 
   const toggleContent = () => {
     setIsOpen(!isOpen);
+  };
+
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem('userLoggedIn');
+    if (!isLoggedIn) {
+      navigate('/login');
+    }
+  }, [navigate]);
+
+  const handleLogout = async () => {
+    try {
+      await axios.get('/logout');
+      sessionStorage.removeItem('userLoggedIn');
+      navigate('/');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   };
 
  
@@ -100,7 +120,7 @@ const FrontendPage = () => {
         <div className="dropdown-content absolute top-full  bg-black rounded-lg shadow-md overflow-hidden z-50  mt-2 p-1 ">
           <div className='flex-row flex items-center hover:bg-neutral-700  pr-16 pl-2  '>
           <img src={home} alt="My Logo" style={{ maxWidth: '25px', height: 'auto' }} />
-          <a href="/" className="block  ml-2 py-2 ">
+          <a href="/Landingpage" className="block  ml-2 py-2 ">
             Home
           </a>
           </div>
@@ -127,7 +147,7 @@ const FrontendPage = () => {
       <div>
       <img src={left} alt="My Logo" style={{ maxWidth: '20px', height: 'auto' }} />
       </div>
-      <a href="FrontPage"><button onClick={() => setShowLoginCard(true)} ml-2 >All Roadmaps</button>
+      <a href="/Landingpage"><button onClick={() => setShowLoginCard(true)} ml-2 >All Roadmaps</button>
       </a>
         </div>
        
@@ -928,7 +948,7 @@ const FrontendPage = () => {
           <div className="bg-gray-200 w-2/5 h-screen fixed top-0 right-0 overflow-y-auto shadow-2xl shadow-slate-950 text-black z-50 ">
             <div className="flex justify-end p-4 mr-2 ">
             <button onClick={() => setShowSidebarQs1(false)}>
-                <FontAwesomeIcon icon={faTimes} className="text-[#687688]" /> {/* Increase size to 2x */}
+                <FontAwesomeIcon icon={faTimes} className="text-[#687688]" /> 
               </button>
             </div>
             <div className='text-3xl font-bold p-4 text-black'>What are the Job titles of a Frontend Developer?</div>
@@ -957,7 +977,7 @@ const FrontendPage = () => {
       <div className="bg-gray-200 w-2/5 h-screen fixed top-0 right-0 overflow-y-auto shadow-2xl shadow-slate-950 text-black z-50">
         <div className="flex justify-end p-4 mr-2 ">
         <button onClick={() => setShowSidebarQs2(false)}>
-            <FontAwesomeIcon icon={faTimes} className="text-[#687688]" /> {/* Increase size to 2x */}
+            <FontAwesomeIcon icon={faTimes} className="text-[#687688]" />
           </button>
         </div>
         <div className='text-3xl font-bold p-4 text-black'>How to become a frontend developer?</div>
@@ -986,7 +1006,7 @@ const FrontendPage = () => {
       <div className="bg-gray-200 w-2/5 h-screen fixed top-0 right-0 overflow-y-auto shadow-2xl shadow-slate-950 text-black z-50">
         <div className="flex justify-end p-4 mr-2 ">
         <button onClick={() => setShowSidebarQs3(false)}>
-            <FontAwesomeIcon icon={faTimes} className="text-[#687688]" /> {/* Increase size to 2x */}
+            <FontAwesomeIcon icon={faTimes} className="text-[#687688]" /> 
           </button>
         </div>
         <div className='text-3xl font-bold p-4 text-black'>What are the frontend developer salaries?</div>
@@ -1013,14 +1033,16 @@ const FrontendPage = () => {
 <div className="flex flex-col max-w-[1240px] mx-auto mb-10 ">
     <div className='text-3xl ml-4 mb-4 text-white '> Test your Knowledge</div>
     <div className='text-white ml-4 w-full border mt-2 border-[#1E293C] p-4 text-base cursor-pointer hover:border-slate-600 rounded-lg'>
-      Javascipt
+    <a href = 'https://quizlet.com/914418080/learn'>Javascipt</a>
+      
     </div>
     <div className='text-white ml-4 w-full border mt-2 border-[#1E293C] p-4 text-base cursor-pointer hover:border-slate-600 rounded-lg'>
-      React
+    <a href = 'https://quizlet.com/914572776/learn'>React</a>
+     
     </div>
     <div className='text-white ml-4 w-full border mt-2 border-[#1E293C] p-4 text-base cursor-pointer hover:border-slate-600 rounded-lg'>
-      Tailwind
-    </div>
+    <a href = 'https://quizlet.com/914572952/learn'>Tailwind</a>
+        </div>
 
     
 </div>

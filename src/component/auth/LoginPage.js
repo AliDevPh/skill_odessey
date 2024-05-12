@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCube } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios'
 
 function LoginPage() {
   const [formData, setFormData] = useState({
@@ -9,23 +10,24 @@ function LoginPage() {
     password: '',
   });
 
+  const navigate = useNavigate();
+  const [error, setError]= useState(null);
+
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
-  const [error, setError] = useState(null);
   const [showLoginCard, setShowLoginCard] = useState(false);
-  const handleSubmit = async(event) => {
+  
+    const handleSubmit = async(event) => {
     event.preventDefault(); 
     
     try{
       const response = await axios.post('http://localhost:3000/login', formData);
       console.log('Login successful:', response.data);  
-      if (response.data && response.data.message === "Login Successful"){
-        const intendedUrl = localStorage.getItem('intendedUrl') || '/'; 
-        localStorage.removeItem('intendedUrl');
-        window.location.href = intendedUrl;
-        
+      if (response.data && response.data.isLoggedIn === true) {
+        localStorage.setItem('userLoggedIn', 'true');
+        navigate('/Landingpage');
       } else if (error.response && error.response.status === 401) {
         setError(error.response.data.message);
       } else {

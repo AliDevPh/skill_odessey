@@ -1,10 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCube } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
-const FrontPage = () => {
+const LandingPage = () => {
     const [showLoginCard, setShowLoginCard] = useState(false);
+    const navigate = useNavigate();
+    const { isLoggedIn, username, setIsLoggedIn, handleFetchUsername } = useLoginStatus();
+
+
+    useEffect(() => {
+        handleFetchUsername();
+        
+    }, []);
+
+    
+
+    const handleLogout = async () => {
+        try {
+            await axios.get('/logout');
+            localStorage.removeItem('userLoggedIn');
+            setIsLoggedIn(false);
+            navigate('/login');
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
+    };
+    
+    const handleRedirect = (path) => {
+        if (isLoggedIn) {
+            navigate(path);
+        } else {
+            localStorage.setItem('intendedUrl', path);
+            navigate('/login');
+        }
+
+
+    };
 
     return (
         <div>
@@ -14,7 +48,7 @@ const FrontPage = () => {
                     <div className='text-3xl font-bold text-[#00df9a]'>SKILL ODESSEY</div>
                 </div>
                 <div className=''>
-                    ACCOUNT NAME
+                {isLoggedIn && <p>{username}</p>}
                 </div>
 
             </div>
@@ -61,4 +95,37 @@ const FrontPage = () => {
     );
 };
 
-export default FrontPage;
+function useLoginStatus() {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [username, setUsername] = useState('');
+  
+    useEffect(() => {
+      const storedUserLoggedIn = localStorage.getItem('userLoggedIn');
+      if (storedUserLoggedIn === 'true') {
+        setIsLoggedIn(true);
+  
+        const usernameFromStorage = localStorage.getItem('Username');
+        if (usernameFromStorage) {
+          setUsername(usernameFromStorage);
+        } else {
+          handleFetchUsername();
+        }
+      } else {
+        setIsLoggedIn(false);
+      }
+    }, []);
+  
+    const handleFetchUsername = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/user'); // Replace with your endpoint
+        setUsername(response.data.username);
+      } catch (error) {
+        console.error('Error fetching username:', error);
+      }
+    };
+  
+    return { isLoggedIn, username, handleFetchUsername };
+  }
+
+  
+export default LandingPage;
